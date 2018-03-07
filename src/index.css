@@ -1,0 +1,123 @@
+body {
+  margin: 0;
+  background-color: rgba(186, 174, 144, 1);
+  font-family: Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;
+}
+
+.mb30 {margin-bottom: 30px;}
+.mt15 {margin-top: 15px}
+.lh20 {line-height: 20px;}
+.letSpace05 {letter-spacing: 0.5px};
+.ws {white-space: pre-wrap}
+
+.bg_img {
+  background-image: url('./img/map.jpg');
+  background-size: cover;
+  height: 70vh; 
+  width: 100%;
+  margin: 0;
+  display: flex;
+  position: relative;  
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 22px 14px -17px rgba(0, 0, 0, 0.6);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  color: rgba(255, 255, 255, 0.801);
+  text-shadow: 1px 0px 2px rgba(0, 0, 0, 0.6),
+              -1px 0px 2px rgba(0, 0, 0, 0.6),
+               0px 1px 2px rgba(0, 0, 0, 0.6),
+               0px -1px 2px rgba(0, 0, 0, 0.6);                 
+}
+
+.info h1 {
+  text-shadow: 1px 4px 6px rgba(0, 0, 0, 0.7),
+              -1px 5px 6px rgba(0, 0, 0, 0.7); 
+  font-size: 40px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 20%;
+  padding: 30px 5% 0 5%;
+  /* max-width: 60%; */
+  height: 100%;
+  min-height: 155px;
+  background-color: rgb(213, 202, 175); 
+  box-shadow: 0px 2px 5px 1px rgba(0,0,0,0.5);
+}
+
+.calculator {
+  display: flex;
+  align-items: center;  
+  padding: 18px;  
+  /* background-color: rgb(191, 178, 147); */
+  border: 4px solid rgba(228, 219, 195, 0.8);  
+  flex-wrap: wrap;
+  flex-direction: column;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.btn_style {
+  border: 1.2px rgba(208, 208, 208, 0.7);
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 15px;
+  justify-content: space-around;
+  text-align: center;
+  width: 130px;
+  margin: 0 2px; 
+  outline-style: none;  
+  outline-color: transparent; 
+  transition: all 0.3s ease-out;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.btn_style.calc_button {
+  font-size: 1em;
+  line-height: 2vh;
+  margin: 15px 0; 
+  width: 12em;
+  height: 2.5em;
+}
+
+
+.btn_style:hover {
+  box-shadow: 0px 1px 0px 0px #e6e6e6, 
+              0px 3px 0px -1px #c3c3c3, 
+              0px 5px 0px -2px #8a8a8a, 
+              0px 8px 0px -4px #717171;
+  transform: translate(0px, -4px);
+  transform-style: preserve-3d;
+}
+
+.btn_style:focus {
+  box-shadow: 0px 1px 0px 0px #e6e6e6, 
+              0px 3px 0px -1px #c3c3c3, 
+              0px 5px 0px -2px #8a8a8a, 
+              0px 8px 0px -4px #717171;
+  transform: translate(0px, -4px);
+  transform-style: preserve-3d;
+}
+
+
+.calc_txt {
+  margin: 0;
+  /* text-align: center; */
+  font-weight: bold;
+  font-size: 20px;
+  /* flex-basis: 100%;  */
+  }
+
+li {
+  list-style: none;
+}
