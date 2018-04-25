@@ -9,6 +9,7 @@ const config = {
   storageBucket: "budsjettapp-3c23e.appspot.com",
   messagingSenderId: "825601825605"
 };
-let fire = firebase.initializeApp(config);
+firebase.initializeApp(config);
 
-  export default fire;
+export const ref = firebase.database().ref();
+export const firebaseAuth = firebase.auth

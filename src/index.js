@@ -1,20 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch } from "react-router-dom";
 import './index.css';
-import App from './App';
-import fire from './fire.js';
+import App from './App.js'
 import registerServiceWorker from './registerServiceWorker';
-import routes from './routes'
-import User from "./userPage";
 
-ReactDOM.render((
-  <BrowserRouter>
-    <Switch>
-     <Route exact path='/' component={App}/>
-     <Route path='/user/:id'component={User}/>
-    </Switch>
-  </BrowserRouter> 
-), document.getElementById('root'));
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
 
 registerServiceWorker();

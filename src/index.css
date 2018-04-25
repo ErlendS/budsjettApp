@@ -121,3 +121,22 @@ body {
 li {
   list-style: none;
 }
+
+/* --------------------------DASHBOARD---------------------------------------- */
+
+.dashboard {
+  display:flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;   
+}
+
+.budgetForm {
+  border: 4px solid rgba(228, 219, 195, 0.8);  
+  padding: 18px; 
+}
+.container {
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+}
