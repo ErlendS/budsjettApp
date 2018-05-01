@@ -1,108 +1,105 @@
 import { budgetCalculator } from '../components/Calculator.js';
-import { ref } from '../config/fire'
+import { db } from '../config/fire'
 import { getUser } from './auth.js'
 
-function _handleCreateBudget(budget, time, userId, budgetName) {
+function _handleCreateBudget( data, userId) {
   console.log('handleCreateBudget activated, userId is', userId)
-  sortBudget(userId, budget, time, budgetName)
-  .then((data) => pushData(data, 'budgets'))
-  // .then((budgetId) => console.log(`push complete, data is ${budgetId}`))
-  .then((budgetId) => setMember(budgetId, userId))
+  initBudget( data, userId)
+  .then((data) => addData(data, 'budgets'))
+  .catch((err) => console.error('Woops, something went wrong here', err))
 }
 
-function sortBudget(userId, budget, time, budgetName){
-  console.log('sorting budget and userId is', userId)
-  const calcResult = budgetCalculator(budget, time)
+function initBudget( {budget, duration, budgetName, currency}, userId){
+  const calcResult = budgetCalculator(budget, duration)
   return Promise.resolve({
-          name: budgetName,
-          period: time,
+          budgetName: budgetName,
           budget: {
             total: budget,
             monthly: calcResult.monthly,
             weekly: calcResult.weekly,
-            daily: calcResult.daily
+            daily: calcResult.daily,
+            duration,
+            remaining: budget,
+            spent: 0,
+            currency
           },
+          members: {[userId]: true}
         })
   }
 
-  function setMember(budgetId, userId){
-    let data = {
-      [budgetId]: {
-        [userId]: true
-      }
-    }
-    return setData(data, 'members')
-  }
-
-// function handleCreateBudget(budget, time, userId, budgetName) {
-//   const calcResult = budgetCalculator(budget, time)
-//   const data = {
-//     budgets: {
-//       [budgetId]: {
-//         name: budgetName,
-//         period: time,
-//         budget: {
-//           total: budget,
-//           monthly: calcResult.monthly,
-//           weekly: calcResult.weekly,
-//           daily: calcResult.daily
-//         },
-//       }
-//     },
-//   }
-//   setData(data, getUser().uid)
-// }
-
-
-
-// members: {
-//   [this.budgetId]: {
-//     BudgetName: budgetName,
-//     [userId]: true
-//   }
-// }
-
-// purchases: [
-  // {
-  //   id: 1234,
-  //   budgetId: 10000,
-  //   name: 'item',
-  //   type: 'purchase',
-  //   price: '1230',
-  //   currency: 'USD',
-  //   date: '2018-01-01'
-  // }, {
-  //     id: 123,
-  //     budgetId: 10000,
-  //     name: 'item',
-  //     type: 'purchase-smeared',
-  //     price: '1230',
-  //     currency: 'USD',
-  //     fromDate: '2018-01-01',
-  //     toDate: '2018-01-03',
-  //   }
-  // ],
-
-function setData( data, location) {
-  ref.child(`/${location}`)
-  .set(data)
-  .then(() => data)
+export function getMyBudgets(userId){
+  console.log('GETTING BUDGETS FOR: ' + userId)
+  let budgets = []
+  let budgetsRef = db.collection('budgets')
+  return budgetsRef.where(`members.${userId}`, '==', true).get()
+  .then((snapshot) => {
+    console.log(snapshot)
+    snapshot.forEach((budget) => (
+      budgets.push(budget.data())
+    ))
+  })
+  .then(() => budgets)
+  .catch((err) => console.error('something whent wrong here' , err))
 }
 
-function pushData(data, location) {
-  console.log('PushData ---')
+export function getPurchases(userId, budgetId) {
+  let purchases = []
+  if(!budgetId || !userId) {
+    return Promise.reject(new Error ('budgetId or userId missing'))
+  }
+  else {
+    let purchaseRef = db.collection('budgets').doc(`${budgetId}`).collection('purchases')
+    return purchaseRef.get()
+    .then((snapshot) => {
+      snapshot.forEach((purchase) => {
+        purchases.push(purchase.data())
+      })
+    })
+    .then(() => purchases) 
+    .catch((err) => console.error(err, 'something went wrong getting purchases'))
+  }
+}
+
+export function getCurrencies() {
+  let currencies = []
+  return db.collection('currencies').get()
+  .then((snapshot) => {
+    snapshot.forEach((currency) => {
+      currencies.push(currency.data())
+    })
+  })
+  .then(() => currencies)
+  .catch((err) => console.error('something went wrong getting currencies', err))
+}
+
+function addData(data, location) {
+  console.log('PushingData ---')
   console.log(data)
   if ( !location) 
   return console.error('no location found') 
   else {
-    let postRef = ref.child(`/${location}`)
-    let newRef = postRef.push()
-    let postId = newRef.key
-    console.log('postId', postId)
-    return newRef.set(data)
-    .then(() => {
-      return postId
-    })
+    let budgetRef = db.collection(`${location}`)
+    budgetRef.add(data)
+    .then((docRef) => (
+      docRef.update({id: docRef.id})
+    ))
+    .then((data) => console.log('data added successfully ', data) || data)
+    .catch((err) => console.error(err, 'something went wrong adding the data'))
+  }
+}
+
+export function addPurchases(data, budgetId, userId) {
+  if(!budgetId || !userId) {
+    return Promise.reject(new Error ('budgetId or userId missing'))
+  }
+  else {
+    let purchaseRef = db.collection('budgets').doc(`${budgetId}`).collection('purchases')
+    purchaseRef.add(data)
+    .then((docRef) => (
+      docRef.update({id: docRef.id})
+    ))
+    .then((e) => console.log('purchases successfully added!') || e)
+    .catch((err) => console.error(err, 'Something went wrong adding purchases'))
   }
 }
 

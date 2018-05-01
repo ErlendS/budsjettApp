@@ -2,6 +2,7 @@ body {
   margin: 0;
   background-color: rgba(186, 174, 144, 1);
   font-family: Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;
+  display: inline-block;
 }
 
 .mb30 {margin-bottom: 30px;}
@@ -139,4 +140,12 @@ li {
 display: flex;
 flex-direction: row;
 flex-wrap: wrap;
+}
+
+/* ------------------------------Chart-------------------------- */
+
+.chart {
+  display: inline-block;
+  width: 700px;
+  height: 400px;
 }

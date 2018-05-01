@@ -1,4 +1,4 @@
-import { ref, firebaseAuth } from '../config/fire'
+import { db, firebaseAuth } from '../config/fire'
 
 export function createUser(email, password) {
   return firebaseAuth().createUserWithEmailAndPassword(email,  password)
@@ -13,53 +13,58 @@ export function logout() {
   return firebaseAuth().signOut()
 }
 
-export function setData(data, userId) {
+
+export function setData(beta, userId) {
+  console.log('Setting beta, beta is', beta)
   !userId ? 
     console.log('error no userID') 
-    : ref.child(`/users/${userId}/budgets/`)
-  .push(
-    data
-  )
-  .then(() => data)
+    : db.collection('users').doc(`${userId}`).set({
+      beta}, {merge: true}
+    )
+  .then(() => beta)
+  .catch(error => {(
+    console.log(error),
+    error)
+  })
 }
 
-// export function pushData(data, location) {
-//   !location 
-//   ? console.log('error no location provided') 
-//   : ref.child(`/${location}`)
-//     .push().set(data)
+// ------------------------------------------------------------
+// FUNCTION TO UPDATE ------------ NOT DONE
+// export function addData(data, userId, budgetId) {
+//   !userId 
+//   ? console.log('error no userId')
+//   : ref.child(`/users/${userId}/budgets/${budgetId}/purchases`)
+//     .push(data) 
 //     .then(() => data)
 // }
-
 export function addData(data, userId, budgetId) {
   !userId 
   ? console.log('error no userId')
-  : ref.child(`/users/${userId}/budgets/${budgetId}/purchases`)
+  : db.child(`/users/${userId}/budgets/${budgetId}/purchases`)
     .push(data) 
     .then(() => data)
 }
 
+//-----------------------------------------------------------------
+// FUNCTION TO UPDATE ---------- NOT DONE
+// function saveUser(user){
+//   ref.child(`/users/${user.uid}/info`)
+//   .set({
+//     email: user.email,
+//     uid: user.uid
+//   })
+//   .then(() => user)
+// }
 function saveUser(user){
-  ref.child(`/users/${user.uid}/info`)
+  db.child(`/users/${user.uid}/info`)
   .set({
     email: user.email,
     uid: user.uid
   })
   .then(() => user)
 }
+// -----------------------------------------------------------------
 
-// function _getUid(){
-//   let uid;
-//   firebaseAuth().onAuthStateChanged(function(user) {
-//     console.log('onAuthStateChanged')
-//     if (user) {
-//       uid = user.uid
-//     } else {
-//       uid = undefined
-//     }
-//   });
-//   return () => uid
-// }
 
 function setUpUserSubscription(){
   let userData;

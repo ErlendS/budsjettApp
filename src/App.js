@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import Home from './components/Home.js';
 import Dashboard from './components/Dashboard.js';
 import {firebaseAuth} from './config/fire.js';
+import Loading from './components/Loading'
 
 
 function PrivateRoute({component: Component, children, authed, ...rest}) {
@@ -40,7 +41,7 @@ class App extends Component {
   componentDidMount() {
     this.removeListner = firebaseAuth().onAuthStateChanged((user) => {
       if (user) {
-        console.log('user is authed')
+        console.log('user is authed', user)
         this.setState({
           authed: true,
           user
@@ -64,7 +65,9 @@ class App extends Component {
         
         <PrivateRoute authed={this.state.authed} path='/dashboard'>
           {(routeProps) => (
-            <Dashboard routeProps={routeProps} user={this.state.user} />
+            this.state.user
+              ? <Dashboard routeProps={routeProps} user={this.state.user} />
+              : <Loading delay={300} />
           )}
         </PrivateRoute>
 
