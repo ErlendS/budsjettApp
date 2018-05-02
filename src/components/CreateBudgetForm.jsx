@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
+import date, { differenceInCalendarDays } from 'date-fns'
 
 
 class CreateBudgetForm extends Component {
@@ -18,13 +19,22 @@ handleChange(e) {
     [name]:value
   })
 }
+setDuration(end, start) {
+  let duration = differenceInCalendarDays(end, start)
+  return Promise.resolve(duration)
+}
 
 handleCreateBudget(e) {
   e.preventDefault()
-  const budget = this.state
-  this.props.onSubmit(budget)
+  this.setDuration(this.state.tripEnd, this.state.tripStart)
+  .then((duration) => this.setState({duration}))
+  .then(() => this.props.onSubmit(this.state))
+  .catch((err) => console.error(err, 'something went wrong trying to create the budget'))
+  // const budget = this.state
+
+  // this.props.onSubmit(budget)
   // TODO: onSubmit can fail...
-  this.setState(this.initBudgetState());
+  // this.setState(this.initBudgetState());
 }
 
 initBudgetState() {
@@ -32,6 +42,8 @@ initBudgetState() {
     budgetName:'',
     duration: '',
     budget: '',
+    tripStart: '',
+    tripEnd: '',
     currency: 'NOK',
   }
 }
@@ -52,7 +64,7 @@ initBudgetState() {
             />
           </div>
 
-          <div className='period mt15'>
+          {/* <div className='period mt15'>
             <input 
               placeholder='Days Gone'
               type='number'
@@ -61,7 +73,27 @@ initBudgetState() {
               className='btn_style'
               onChange={this.handleChange}
             />
+          </div> */}
+
+          <div className='period mt15'>
+            <label>Start</label> 
+            <input 
+            type='date'
+            name='tripStart'
+            value={this.state.tripStart}
+            onChange={this.handleChange}
+            />
           </div>
+          <div className='period mt15'>
+            <label>End</label> 
+            <input 
+            type='date'
+            name='tripEnd'
+            value={this.state.tripEnd}
+            onChange={this.handleChange}
+            />
+          </div>
+
 
           <div className='budget mt15'>
             <input 

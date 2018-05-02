@@ -9,7 +9,7 @@ function _handleCreateBudget( data, userId) {
   .catch((err) => console.error('Woops, something went wrong here', err))
 }
 
-function initBudget( {budget, duration, budgetName, currency}, userId){
+function initBudget( {budget, duration, tripEnd, tripStart, budgetName, currency}, userId){
   const calcResult = budgetCalculator(budget, duration)
   return Promise.resolve({
           budgetName: budgetName,
@@ -21,6 +21,8 @@ function initBudget( {budget, duration, budgetName, currency}, userId){
             duration,
             remaining: budget,
             spent: 0,
+            tripStart,
+            tripEnd,
             currency
           },
           members: {[userId]: true}
