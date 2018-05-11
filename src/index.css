@@ -4,6 +4,9 @@ body {
   font-family: Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;
   display: inline-block;
 }
+*, *::after, *::before {
+  box-sizing: border-box;
+}
 
 .mb30 {margin-bottom: 30px;}
 .mt15 {margin-top: 15px}
@@ -140,6 +143,10 @@ li {
 display: flex;
 flex-direction: row;
 flex-wrap: wrap;
+}
+
+.purchaseForm {
+  border: none;
 }
 
 /* ------------------------------Chart-------------------------- */

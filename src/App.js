@@ -7,12 +7,10 @@ import Loading from './components/Loading'
 
 
 function PrivateRoute({component: Component, children, authed, ...rest}) {
-  console.log('privateRoute function activated', rest)
   return (
     <Route
     {...rest}
     render = {props => {
-      console.log('renderprop', props)
       return authed 
       ? children(props) 
       :  <Redirect to='/' />
@@ -21,7 +19,6 @@ function PrivateRoute({component: Component, children, authed, ...rest}) {
 }
 
 function PublicRoute({component: Component, authed, ...rest}) {
-  console.log('publicRoute function activated')
   return (
     <Route
       {...rest}
@@ -41,7 +38,6 @@ class App extends Component {
   componentDidMount() {
     this.removeListner = firebaseAuth().onAuthStateChanged((user) => {
       if (user) {
-        console.log('user is authed', user)
         this.setState({
           authed: true,
           user

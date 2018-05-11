@@ -15,28 +15,17 @@ export function logout() {
 
 
 export function setData(beta, userId) {
-  console.log('Setting beta, beta is', beta)
   !userId ? 
     console.log('error no userID') 
     : db.collection('users').doc(`${userId}`).set({
       beta}, {merge: true}
     )
   .then(() => beta)
-  .catch(error => {(
-    console.log(error),
-    error)
-  })
+  .catch((error) => 
+    console.log(error)
+  )
 }
 
-// ------------------------------------------------------------
-// FUNCTION TO UPDATE ------------ NOT DONE
-// export function addData(data, userId, budgetId) {
-//   !userId 
-//   ? console.log('error no userId')
-//   : ref.child(`/users/${userId}/budgets/${budgetId}/purchases`)
-//     .push(data) 
-//     .then(() => data)
-// }
 export function addData(data, userId, budgetId) {
   !userId 
   ? console.log('error no userId')
@@ -45,16 +34,6 @@ export function addData(data, userId, budgetId) {
     .then(() => data)
 }
 
-//-----------------------------------------------------------------
-// FUNCTION TO UPDATE ---------- NOT DONE
-// function saveUser(user){
-//   ref.child(`/users/${user.uid}/info`)
-//   .set({
-//     email: user.email,
-//     uid: user.uid
-//   })
-//   .then(() => user)
-// }
 function saveUser(user){
   db.child(`/users/${user.uid}/info`)
   .set({
@@ -63,7 +42,6 @@ function saveUser(user){
   })
   .then(() => user)
 }
-// -----------------------------------------------------------------
 
 
 function setUpUserSubscription(){
@@ -74,7 +52,6 @@ function setUpUserSubscription(){
         userId: user.uid,
         email: user.email,
     }
-    console.log(userData)
   } else {
      userData = undefined;
     }
