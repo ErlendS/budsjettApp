@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import date, { compareAsc } from 'date-fns'
-import { durationLeft } from '../helpers/budgetUtils'
+import { duration } from '../helpers/budgetUtils'
 import { DateRangePicker, SingleDatePicker } from 'react-dates'
 
 class PurchaseForm extends Component {
@@ -36,6 +36,7 @@ class PurchaseForm extends Component {
       smear: false,
       startDate: null,
       endDate: null,
+      smearDuration: 0,
     })
   }
 
@@ -96,7 +97,11 @@ class PurchaseForm extends Component {
                 endDate={this.state.endDate || null}
                 endDateId="endDate"
                 onDatesChange={({ startDate, endDate }) => {
-                  this.setState({ startDate, endDate })
+                  this.setState({
+                    startDate,
+                    endDate,
+                    smearDuration: duration(endDate, startDate),
+                  })
                 }}
                 focusedInput={this.state.focusedInput || null}
                 onFocusChange={focusedInput => this.setState({ focusedInput })}

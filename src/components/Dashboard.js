@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { logout } from '../helpers/auth.js'
 import Chart from './Chart.js'
+import UserBudgetGraph from './VictoryChart'
 import {
   handleCreateBudget,
   getMyBudgets,
@@ -16,7 +17,11 @@ import FirestoreSubscribe, {
 import PurchaseForm from './PurchaseForm'
 import CreateBudgetForm from './CreateBudgetForm'
 import Loading from './Loading'
-import { totalSpending, date_YYYY_MM_DD } from '../helpers/budgetUtils'
+import {
+  totalSpending,
+  date_YYYY_MM_DD,
+  smearPurchases,
+} from '../helpers/budgetUtils'
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -62,6 +67,7 @@ export default class Dashboard extends Component {
     }
     return (
       <div className="dashboard">
+        {/* <UserBudgetGraph /> */}
         <div>
           <div className="chartGraph">
             {this.state.selectedBudgetId && (
@@ -73,15 +79,16 @@ export default class Dashboard extends Component {
                     >
                       {purchases => {
                         console.log('---------------')
-                        console.log(purchases)
+                        console.log('purchases', purchases)
                         return !purchases ? null : (
-                          <Chart
-                            purchases={purchases}
+                          <UserBudgetGraph
+                            key={purchases.length}
+                            purchases={smearPurchases(purchases)}
                             budget={budget}
-                            labels={date_YYYY_MM_DD(
-                              budget.meta.tripStart,
-                              budget.meta.tripEnd
-                            )}
+                            // labels={date_YYYY_MM_DD(
+                            //   budget.meta.tripStart,
+                            //   budget.meta.tripEnd
+                            // )}
                           />
                         )
                       }}
@@ -154,30 +161,6 @@ export default class Dashboard extends Component {
                 </FirebaseUserBudget>
               )}
             </div>
-            {/* <div>
-              <p> My Budgets </p>
-              <FirebaseUserBudgets userId={this.props.user.uid}>
-                {(budgets = []) =>
-                  budgets.map((budget, i) => (
-                    <ul key={i}>
-                      <li key={i}>{budget.budgetName}</li>
-                      <ul>
-                        <li> Total: {budget.budget.total}$ </li> */}
-            {/* <li> Duration: {budget.budget.duration} days </li> */}
-            {/* </ul>
-                    </ul>
-                  ))
-                }
-              </FirebaseUserBudgets>
-            </div> */}
-            {/* <div>
-              <p> My purchases </p>
-              {this.state.purchases.map((purchase, i) => (
-                <ul>
-                    <li> {purchase.itemName} - {purchase.price} $</li>
-                </ul>
-              ))}
-            </div> */}
           </div>
           <div className="logout">
             <button
@@ -189,16 +172,10 @@ export default class Dashboard extends Component {
             </button>
           </div>
           <div>
-            <button onClick={this.testFuction} children="Click Me!" />
+            <button onClick={this.testFuction} children="Test" />
           </div>
         </div>
       </div>
     )
   }
 }
-
-// class Loading extends Component {
-//   render() {
-//    return  <h1> Please wait, loading </h1>
-//   }
-// }
